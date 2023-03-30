@@ -1,12 +1,14 @@
 package co.edu.uniquindio.biblioteca.servicio;
 
 import co.edu.uniquindio.biblioteca.dto.LibroDTO;
-import co.edu.uniquindio.biblioteca.entity.Autor;
-import co.edu.uniquindio.biblioteca.entity.Libro;
+import co.edu.uniquindio.biblioteca.dto.LibroIsbnDTO;
+import co.edu.uniquindio.biblioteca.dto.Respuesta;
+import co.edu.uniquindio.biblioteca.model.Autor;
+import co.edu.uniquindio.biblioteca.model.Libro;
 import co.edu.uniquindio.biblioteca.repo.AutorRepo;
 import co.edu.uniquindio.biblioteca.repo.LibroRepo;
-import co.edu.uniquindio.biblioteca.servicios.excepciones.AutorNoEncontradoException;
-import co.edu.uniquindio.biblioteca.servicios.excepciones.LibroNoEncontradoException;
+import co.edu.uniquindio.biblioteca.servicio.excepciones.AuthorNotFoundException;
+import co.edu.uniquindio.biblioteca.servicio.excepciones.BookNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,61 +19,78 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class LibroServicio {
-
     private final LibroRepo libroRepo;
     private final AutorRepo autorRepo;
 
-    public Libro save(LibroDTO libro){
+    public Libro save(LibroDTO libro) {
+
 
         Optional<Libro> guardado = libroRepo.findById(libro.isbn());
 
-        if(guardado.isPresent()){
-            throw new RuntimeException("El libro con el isbn "+libro.isbn()+" ya existe");
+        if (guardado.isPresent()) {
+            throw new RuntimeException("El libro con el isbn " + libro.isbn() + " ya existe.");
         }
 
-        return libroRepo.save( convertir(libro) );
+        return libroRepo.save(convertir(libro));
     }
 
-    public Libro findById(String isbn){
-        return libroRepo.findById(isbn).orElseThrow(()-> new LibroNoEncontradoException("El libro no existe"));
+    public void delete(String bookId) {
+        libroRepo.deleteById(bookId);
     }
 
-    public List<Libro> findAll(){
+    public Libro findById(String isbn) {
+        return libroRepo.findById(isbn).orElseThrow(() -> new BookNotFoundException("El libro no existe"));
+    }
+
+    public List<Libro> findAll() {
         return libroRepo.findAll();
     }
 
-    public Libro update(LibroDTO libro){
-        return libroRepo.save( convertir(libro) );
+    public Libro update(LibroDTO libro) {
+        return libroRepo.save(convertir(libro));
     }
 
-    private Libro convertir(LibroDTO libro){
+    private Libro convertir(LibroDTO libro) {
 
-        List<Autor> autores = autorRepo.findAllById( libro.idAutores() );
+        List<Autor> existingAuthorsList = autorRepo.findAllById(libro.idAutores());
 
-        if(autores.size()!=libro.idAutores().size()){
-
-            List<Long> idsExistentes = autores.stream().map(Autor::getId).toList();
-
-            String noEncontrados = libro.idAutores()
+        if (existingAuthorsList.size() != libro.idAutores().size()) {
+            List<Long> idsExistentes = existingAuthorsList.stream().map(Autor::getId).toList();
+            String listaAutoresNoEncontrados = libro.idAutores()
                     .stream()
                     .filter(id -> !idsExistentes.contains(id))
                     .map(Object::toString)
                     .collect(Collectors.joining(","));
 
-            throw new AutorNoEncontradoException("Los autores "+noEncontrados+" no existen");
-
+            throw new AuthorNotFoundException("El autor: " + listaAutoresNoEncontrados + " no existe.");
         }
 
         Libro nuevo = Libro.builder()
-                .isbn(libro.isbn())
+                .isbn(libro.isbn().trim())
                 .nombre(libro.nombre())
                 .genero(libro.genero())
                 .fechaPublicacion(libro.fechaPublicacion())
                 .unidades(libro.unidades())
-                .autor(autores)
+                .autor(existingAuthorsList)
                 .build();
 
         return nuevo;
     }
 
+    public LibroIsbnDTO validateBookList(List<String> bookIsbList) {
+        List<Libro> existingBooksList = libroRepo.findAllById(bookIsbList);
+        boolean result = true;
+
+        //result = false;
+        List<String> idsExistentes = existingBooksList.stream().map(Libro::getIsbn).toList();
+        List<String> noEncontrados = bookIsbList
+                .stream()
+                .filter(id -> !idsExistentes.contains(id))
+                .map(Object::toString)
+                .collect(Collectors.toList());
+
+        LibroIsbnDTO respuesta = new LibroIsbnDTO(idsExistentes, noEncontrados);
+
+        return respuesta;
+    }
 }

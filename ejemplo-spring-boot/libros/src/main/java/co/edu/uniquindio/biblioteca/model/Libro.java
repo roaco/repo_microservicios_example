@@ -1,5 +1,6 @@
 package co.edu.uniquindio.biblioteca.model;
 
+import co.edu.uniquindio.biblioteca.enums.Gender;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -27,7 +28,7 @@ public class Libro implements Serializable {
     private String nombre;
 
     @Column(nullable = false)
-    private Genero genero;
+    private Gender genero;
 
     @Column(nullable = false)
     private int unidades;
@@ -37,5 +38,4 @@ public class Libro implements Serializable {
 
     @ManyToMany
     private List<Autor> autor;
-
 }

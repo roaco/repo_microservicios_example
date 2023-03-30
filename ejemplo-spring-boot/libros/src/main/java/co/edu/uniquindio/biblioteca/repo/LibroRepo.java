@@ -1,6 +1,6 @@
 package co.edu.uniquindio.biblioteca.repo;
 
-import co.edu.uniquindio.biblioteca.entity.Libro;
+import co.edu.uniquindio.biblioteca.model.Libro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
