@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/ejemplo-spring-boot" />
+        <option name="gradleJvm" value="openjdk-19" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/ejemplo-spring-boot" />
+            <option value="$PROJECT_DIR$/ejemplo-spring-boot/clientes" />
+            <option value="$PROJECT_DIR$/ejemplo-spring-boot/eureka-server" />
+            <option value="$PROJECT_DIR$/ejemplo-spring-boot/gateway" />
+            <option value="$PROJECT_DIR$/ejemplo-spring-boot/libros" />
+            <option value="$PROJECT_DIR$/ejemplo-spring-boot/prestamos" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
