@@ -46,12 +46,14 @@ services:
 
   eureka:
     image: eureka-service
+    build: ./eureka-server
     restart: always
     ports:
       - "8761:8761"
 
   clientes:
     image: cliente-service
+    build: ./clientes
     restart: always
     container_name: clientes
     depends_on:
@@ -76,6 +78,7 @@ services:
 
   prestamos:
     image: prestamos-service
+    build: ./prestamos
     restart: always
     depends_on:
       - db
