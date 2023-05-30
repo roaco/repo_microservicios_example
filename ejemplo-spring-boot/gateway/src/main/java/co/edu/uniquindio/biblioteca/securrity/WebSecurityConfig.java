@@ -27,8 +27,10 @@ public class WebSecurityConfig {
         http
                 .authorizeExchange( e ->
                         e
-                                .pathMatchers("/api/libros/*", "/api/clientes/*")
-                                .hasRole("admin")
+                                .pathMatchers("/api/auth/**", "/api/cliente/**")
+                                .permitAll()
+                                .pathMatchers("/api/libro/**")
+                                .hasRole(ADMIN)
                                 .pathMatchers("/api/prestamos/**")
                                 .hasAnyRole("admin", "user")
                                 .anyExchange()

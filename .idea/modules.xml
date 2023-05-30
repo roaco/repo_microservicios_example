@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/clientes/biblioteca.clientes.main.iml" filepath="$PROJECT_DIR$/.idea/modules/clientes/biblioteca.clientes.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/libros/biblioteca.libros.main.iml" filepath="$PROJECT_DIR$/.idea/modules/libros/biblioteca.libros.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/prestamos/biblioteca.prestamos.main.iml" filepath="$PROJECT_DIR$/.idea/modules/prestamos/biblioteca.prestamos.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/repo_microservicios_example.iml" filepath="$PROJECT_DIR$/.idea/repo_microservicios_example.iml" />
     </modules>
   </component>
